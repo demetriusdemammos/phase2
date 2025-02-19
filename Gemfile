@@ -105,3 +105,5 @@ gem "shakapacker", "= 6.5"
 gem "react-rails", "= 2.6"
 
 gem "stringio", "3.1.2"
+
+gem "nokogiri", "1.18.2"

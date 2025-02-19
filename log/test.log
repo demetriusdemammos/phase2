@@ -1,0 +1,396 @@
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.2ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "addresses"[0m
+  [1m[35m (1.0ms)[0m  [1m[35mCREATE TABLE "addresses" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "recipient" varchar, "street" varchar, "city" varchar, "state" varchar, "zip" varchar, "customer_id" integer NOT NULL, "active" boolean, "address_type" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "index_addresses_on_customer_id" ON "addresses" ("customer_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "customers"[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE TABLE "customers" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "first_name" varchar, "last_name" varchar, "phone" varchar, "active" boolean, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE IF EXISTS "orders"[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "orders" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "customer_id" integer NOT NULL, "address_id" integer NOT NULL, "order_date" date, "total" decimal, "paid" boolean, "payment_receipt" text, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE INDEX "index_orders_on_address_id" ON "orders" ("address_id")[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE INDEX "index_orders_on_customer_id" ON "orders" ("customer_id")[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "aaddresses" ("id" integer NOT NULL PRIMARY KEY, "recipient" varchar DEFAULT NULL, "street" varchar DEFAULT NULL, "city" varchar DEFAULT NULL, "state" varchar DEFAULT NULL, "zip" varchar DEFAULT NULL, "customer_id" integer NOT NULL, "active" boolean DEFAULT NULL, "address_type" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_aaddresses_on_customer_id" ON "aaddresses" ("customer_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "aaddresses" ("id","recipient","street","city","state","zip","customer_id","active","address_type","created_at","updated_at")
+                     SELECT "id","recipient","street","city","state","zip","customer_id","active","address_type","created_at","updated_at" FROM "addresses"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "addresses"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "addresses" ("id" integer NOT NULL PRIMARY KEY, "recipient" varchar DEFAULT NULL, "street" varchar DEFAULT NULL, "city" varchar DEFAULT NULL, "state" varchar DEFAULT NULL, "zip" varchar DEFAULT NULL, "customer_id" integer NOT NULL, "active" boolean DEFAULT NULL, "address_type" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_d5f9efddd3"
+FOREIGN KEY ("customer_id")
+  REFERENCES "customers" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_addresses_on_customer_id" ON "addresses" ("customer_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "addresses" ("id","recipient","street","city","state","zip","customer_id","active","address_type","created_at","updated_at")
+                     SELECT "id","recipient","street","city","state","zip","customer_id","active","address_type","created_at","updated_at" FROM "aaddresses"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "aaddresses"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "aorders" ("id" integer NOT NULL PRIMARY KEY, "customer_id" integer NOT NULL, "address_id" integer NOT NULL, "order_date" date DEFAULT NULL, "total" decimal DEFAULT NULL, "paid" boolean DEFAULT NULL, "payment_receipt" text DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_aorders_on_customer_id" ON "aorders" ("customer_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_aorders_on_address_id" ON "aorders" ("address_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "aorders" ("id","customer_id","address_id","order_date","total","paid","payment_receipt","created_at","updated_at")
+                     SELECT "id","customer_id","address_id","order_date","total","paid","payment_receipt","created_at","updated_at" FROM "orders"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "orders"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "orders" ("id" integer NOT NULL PRIMARY KEY, "customer_id" integer NOT NULL, "address_id" integer NOT NULL, "order_date" date DEFAULT NULL, "total" decimal DEFAULT NULL, "paid" boolean DEFAULT NULL, "payment_receipt" text DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_774ef80392"
+FOREIGN KEY ("address_id")
+  REFERENCES "addresses" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_orders_on_address_id" ON "orders" ("address_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_orders_on_customer_id" ON "orders" ("customer_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "orders" ("id","customer_id","address_id","order_date","total","paid","payment_receipt","created_at","updated_at")
+                     SELECT "id","customer_id","address_id","order_date","total","paid","payment_receipt","created_at","updated_at" FROM "aorders"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "aorders"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TEMPORARY TABLE "aorders" ("id" integer NOT NULL PRIMARY KEY, "customer_id" integer NOT NULL, "address_id" integer NOT NULL, "order_date" date DEFAULT NULL, "total" decimal DEFAULT NULL, "paid" boolean DEFAULT NULL, "payment_receipt" text DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_aorders_on_customer_id" ON "aorders" ("customer_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "tindex_aorders_on_address_id" ON "aorders" ("address_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "aorders" ("id","customer_id","address_id","order_date","total","paid","payment_receipt","created_at","updated_at")
+                     SELECT "id","customer_id","address_id","order_date","total","paid","payment_receipt","created_at","updated_at" FROM "orders"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "orders"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE TABLE "orders" ("id" integer NOT NULL PRIMARY KEY, "customer_id" integer NOT NULL, "address_id" integer NOT NULL, "order_date" date DEFAULT NULL, "total" decimal DEFAULT NULL, "paid" boolean DEFAULT NULL, "payment_receipt" text DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_774ef80392"
+FOREIGN KEY ("address_id")
+  REFERENCES "addresses" ("id")
+, CONSTRAINT "fk_rails_3dad120da9"
+FOREIGN KEY ("customer_id")
+  REFERENCES "customers" ("id")
+)[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_orders_on_address_id" ON "orders" ("address_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mCREATE INDEX "index_orders_on_customer_id" ON "orders" ("customer_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "orders" ("id","customer_id","address_id","order_date","total","paid","payment_receipt","created_at","updated_at")
+                     SELECT "id","customer_id","address_id","order_date","total","paid","payment_receipt","created_at","updated_at" FROM "aorders"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mDROP TABLE "aorders"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[35m (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES (20250201200728)[0m
+  [1m[35m (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" (version) VALUES
+(20250201195405),
+(20250201195912);
+
+[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.1ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "environment"], ["value", "test"], ["created_at", "2025-02-18 20:38:30.185303"], ["updated_at", "2025-02-18 20:38:30.185303"]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.1ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES (?, ?, ?, ?)[0m  [["key", "schema_sha1"], ["value", "b7d5fbe641acb9ad56c8c5457215ee1338911f98"], ["created_at", "2025-02-18 20:38:30.186548"], ["updated_at", "2025-02-18 20:38:30.186548"]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "environment"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Pluck (0.0ms)[0m  [1m[34mSELECT "ar_internal_metadata"."value" FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? LIMIT ?[0m  [["key", "schema_sha1"], ["LIMIT", 1]]
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------------------
+Customer: test_0008_activates and deactivates customers
+-------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (1.3ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "Jane"], ["last_name", "Smith"], ["phone", "9876543210"], ["active", 0], ["created_at", "2025-02-18 20:38:43.697953"], ["updated_at", "2025-02-18 20:38:43.697953"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Update (0.2ms)[0m  [1m[33mUPDATE "customers" SET "active" = ?, "updated_at" = ? WHERE "customers"."id" = ?[0m  [["active", 1], ["updated_at", "2025-02-18 20:38:43.699931"], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.0ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:43.700767"], ["updated_at", "2025-02-18 20:38:43.700767"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Update (0.0ms)[0m  [1m[33mUPDATE "customers" SET "active" = ?, "updated_at" = ? WHERE "customers"."id" = ?[0m  [["active", 0], ["updated_at", "2025-02-18 20:38:43.701116"], ["id", 2]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------------------------
+Customer: test_0003_returns the customer's billing address
+----------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.1ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:43.702120"], ["updated_at", "2025-02-18 20:38:43.702120"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAddress Load (0.1ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."address_type" = ? AND "addresses"."id" IS NOT NULL ORDER BY "addresses"."id" ASC LIMIT ?[0m  [["customer_id", 1], ["address_type", "billing"], ["LIMIT", 1]]
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."recipient" = ? AND "addresses"."zip" = ? LIMIT ?[0m  [["customer_id", 1], ["recipient", "John Doe"], ["zip", "15213"], ["LIMIT", 1]]
+  [1m[36mAddress Create (0.1ms)[0m  [1m[32mINSERT INTO "addresses" ("recipient", "street", "city", "state", "zip", "customer_id", "active", "address_type", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["recipient", "John Doe"], ["street", "123 Main St"], ["city", "Pittsburgh"], ["state", "PA"], ["zip", "15213"], ["customer_id", 1], ["active", 1], ["address_type", "billing"], ["created_at", "2025-02-18 20:38:43.711851"], ["updated_at", "2025-02-18 20:38:43.711851"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mAddress Load (0.0ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."address_type" = ? LIMIT ?[0m  [["customer_id", 1], ["address_type", "billing"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------------------------------------------------
+Customer: test_0009_returns the customer's name in 'last, first' format
+-----------------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.1ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:43.712961"], ["updated_at", "2025-02-18 20:38:43.712961"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------------
+Customer: test_0005_returns active customers
+--------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.1ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:43.713967"], ["updated_at", "2025-02-18 20:38:43.713967"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.0ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "Jane"], ["last_name", "Smith"], ["phone", "9876543210"], ["active", 0], ["created_at", "2025-02-18 20:38:43.714374"], ["updated_at", "2025-02-18 20:38:43.714374"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mCustomer Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "customers" WHERE "customers"."active" = ? AND "customers"."id" = ? LIMIT ?[0m  [["active", 1], ["id", 1], ["LIMIT", 1]]
+  [1m[36mCustomer Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "customers" WHERE "customers"."active" = ? AND "customers"."id" = ? LIMIT ?[0m  [["active", 1], ["id", 2], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------------------------------------
+Customer: test_0004_returns customers in alphabetical order
+-----------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.2ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:43.715574"], ["updated_at", "2025-02-18 20:38:43.715574"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.0ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "Jane"], ["last_name", "Smith"], ["phone", "9876543210"], ["active", 0], ["created_at", "2025-02-18 20:38:43.716042"], ["updated_at", "2025-02-18 20:38:43.716042"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mCustomer Load (0.3ms)[0m  [1m[34mSELECT "customers".* FROM "customers" ORDER BY last_name, first_name[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+---------------------------------------
+Customer: test_0007_returns proper name
+---------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.1ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:43.717398"], ["updated_at", "2025-02-18 20:38:43.717398"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------
+Customer: test_0002_validates phone format
+------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.1ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:43.718146"], ["updated_at", "2025-02-18 20:38:43.718146"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------------
+Customer: test_0006_returns inactive customers
+----------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.1ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:44.267014"], ["updated_at", "2025-02-18 20:38:44.267014"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.0ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "Jane"], ["last_name", "Smith"], ["phone", "9876543210"], ["active", 0], ["created_at", "2025-02-18 20:38:44.267615"], ["updated_at", "2025-02-18 20:38:44.267615"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mCustomer Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "customers" WHERE "customers"."active" = ? AND "customers"."id" = ? LIMIT ?[0m  [["active", 0], ["id", 2], ["LIMIT", 1]]
+  [1m[36mCustomer Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "customers" WHERE "customers"."active" = ? AND "customers"."id" = ? LIMIT ?[0m  [["active", 0], ["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+---------------------------------------------------------
+Customer: test_0001_validates presence of required fields
+---------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------
+Customer: test_0010_reformats phone numbers
+-------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.1ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "Tom"], ["last_name", "Brown"], ["phone", "1234567890"], ["active", nil], ["created_at", "2025-02-18 20:38:44.269573"], ["updated_at", "2025-02-18 20:38:44.269573"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------------------
+Address: test_0004_validates customer must be active
+----------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.1ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "Jane"], ["last_name", "Smith"], ["phone", "9876543210"], ["active", 0], ["created_at", "2025-02-18 20:38:44.270678"], ["updated_at", "2025-02-18 20:38:44.270678"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mAddress Load (0.0ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."address_type" = ? AND "addresses"."id" IS NOT NULL ORDER BY "addresses"."id" ASC LIMIT ?[0m  [["customer_id", 1], ["address_type", "billing"], ["LIMIT", 1]]
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."recipient" = ? AND "addresses"."zip" IS NULL LIMIT ?[0m  [["customer_id", 1], ["recipient", "Jane Smith"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------------------------------
+Address: test_0003_validates only one billing address per customer
+------------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.3ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:44.272243"], ["updated_at", "2025-02-18 20:38:44.272243"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAddress Load (0.0ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."address_type" = ? AND "addresses"."id" IS NOT NULL ORDER BY "addresses"."id" ASC LIMIT ?[0m  [["customer_id", 1], ["address_type", "billing"], ["LIMIT", 1]]
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."recipient" = ? AND "addresses"."zip" = ? LIMIT ?[0m  [["customer_id", 1], ["recipient", "John Doe"], ["zip", "15213"], ["LIMIT", 1]]
+  [1m[36mAddress Create (0.0ms)[0m  [1m[32mINSERT INTO "addresses" ("recipient", "street", "city", "state", "zip", "customer_id", "active", "address_type", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["recipient", "John Doe"], ["street", "123 Main St"], ["city", "Pittsburgh"], ["state", "PA"], ["zip", "15213"], ["customer_id", 1], ["active", 1], ["address_type", "billing"], ["created_at", "2025-02-18 20:38:44.273422"], ["updated_at", "2025-02-18 20:38:44.273422"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mAddress Load (0.0ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."address_type" = ? AND "addresses"."id" IS NOT NULL ORDER BY "addresses"."id" ASC LIMIT ?[0m  [["customer_id", 1], ["address_type", "billing"], ["LIMIT", 1]]
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."recipient" = ? AND "addresses"."zip" IS NULL LIMIT ?[0m  [["customer_id", 1], ["recipient", "New Bill"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------------------
+Address: test_0007_checks if an address already exists
+------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.1ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:44.274783"], ["updated_at", "2025-02-18 20:38:44.274783"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAddress Load (0.0ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."address_type" = ? AND "addresses"."id" IS NOT NULL ORDER BY "addresses"."id" ASC LIMIT ?[0m  [["customer_id", 1], ["address_type", "billing"], ["LIMIT", 1]]
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."recipient" = ? AND "addresses"."zip" = ? LIMIT ?[0m  [["customer_id", 1], ["recipient", "John Doe"], ["zip", "15213"], ["LIMIT", 1]]
+  [1m[36mAddress Create (0.0ms)[0m  [1m[32mINSERT INTO "addresses" ("recipient", "street", "city", "state", "zip", "customer_id", "active", "address_type", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["recipient", "John Doe"], ["street", "123 Main St"], ["city", "Pittsburgh"], ["state", "PA"], ["zip", "15213"], ["customer_id", 1], ["active", 1], ["address_type", "billing"], ["created_at", "2025-02-18 20:38:44.275735"], ["updated_at", "2025-02-18 20:38:44.275735"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."recipient" = ? AND "addresses"."zip" = ? LIMIT ?[0m  [["customer_id", 1], ["recipient", "John Doe"], ["zip", "15213"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------------
+Address: test_0005_validates duplicate addresses
+------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.2ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:44.276610"], ["updated_at", "2025-02-18 20:38:44.276610"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAddress Load (0.0ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."address_type" = ? AND "addresses"."id" IS NOT NULL ORDER BY "addresses"."id" ASC LIMIT ?[0m  [["customer_id", 1], ["address_type", "billing"], ["LIMIT", 1]]
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."recipient" = ? AND "addresses"."zip" = ? LIMIT ?[0m  [["customer_id", 1], ["recipient", "John Doe"], ["zip", "15213"], ["LIMIT", 1]]
+  [1m[36mAddress Create (0.0ms)[0m  [1m[32mINSERT INTO "addresses" ("recipient", "street", "city", "state", "zip", "customer_id", "active", "address_type", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["recipient", "John Doe"], ["street", "123 Main St"], ["city", "Pittsburgh"], ["state", "PA"], ["zip", "15213"], ["customer_id", 1], ["active", 1], ["address_type", "billing"], ["created_at", "2025-02-18 20:38:44.277606"], ["updated_at", "2025-02-18 20:38:44.277606"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."recipient" = ? AND "addresses"."zip" = ? LIMIT ?[0m  [["customer_id", 1], ["recipient", "John Doe"], ["zip", "15213"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+----------------------------------------------------
+Address: test_0008_makes address active and inactive
+----------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.1ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:44.278688"], ["updated_at", "2025-02-18 20:38:44.278688"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."recipient" = ? AND "addresses"."zip" = ? LIMIT ?[0m  [["customer_id", 1], ["recipient", "Jane Doe"], ["zip", "15214"], ["LIMIT", 1]]
+  [1m[36mAddress Create (0.0ms)[0m  [1m[32mINSERT INTO "addresses" ("recipient", "street", "city", "state", "zip", "customer_id", "active", "address_type", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["recipient", "Jane Doe"], ["street", "456 Second St"], ["city", "Pittsburgh"], ["state", "PA"], ["zip", "15214"], ["customer_id", 1], ["active", 1], ["address_type", "shipping"], ["created_at", "2025-02-18 20:38:44.279405"], ["updated_at", "2025-02-18 20:38:44.279405"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAddress Update (0.0ms)[0m  [1m[33mUPDATE "addresses" SET "active" = ?, "updated_at" = ? WHERE "addresses"."id" = ?[0m  [["active", 0], ["updated_at", "2025-02-18 20:38:44.279797"], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mAddress Load (0.0ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" WHERE "addresses"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Load (0.1ms)[0m  [1m[34mSELECT "customers".* FROM "customers" WHERE "customers"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mAddress Update (0.0ms)[0m  [1m[33mUPDATE "addresses" SET "active" = ?, "updated_at" = ? WHERE "addresses"."id" = ?[0m  [["active", 1], ["updated_at", "2025-02-18 20:38:44.280890"], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mAddress Load (0.0ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" WHERE "addresses"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+---------------------------------------------------------
+Address: test_0006_returns addresses correctly via scopes
+---------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.1ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:44.281678"], ["updated_at", "2025-02-18 20:38:44.281678"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAddress Load (0.0ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."address_type" = ? AND "addresses"."id" IS NOT NULL ORDER BY "addresses"."id" ASC LIMIT ?[0m  [["customer_id", 1], ["address_type", "billing"], ["LIMIT", 1]]
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."recipient" = ? AND "addresses"."zip" = ? LIMIT ?[0m  [["customer_id", 1], ["recipient", "John Doe"], ["zip", "15213"], ["LIMIT", 1]]
+  [1m[36mAddress Create (0.0ms)[0m  [1m[32mINSERT INTO "addresses" ("recipient", "street", "city", "state", "zip", "customer_id", "active", "address_type", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["recipient", "John Doe"], ["street", "123 Main St"], ["city", "Pittsburgh"], ["state", "PA"], ["zip", "15213"], ["customer_id", 1], ["active", 1], ["address_type", "billing"], ["created_at", "2025-02-18 20:38:44.282753"], ["updated_at", "2025-02-18 20:38:44.282753"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."recipient" = ? AND "addresses"."zip" = ? LIMIT ?[0m  [["customer_id", 1], ["recipient", "Jane Doe"], ["zip", "15214"], ["LIMIT", 1]]
+  [1m[36mAddress Create (0.0ms)[0m  [1m[32mINSERT INTO "addresses" ("recipient", "street", "city", "state", "zip", "customer_id", "active", "address_type", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["recipient", "Jane Doe"], ["street", "456 Second St"], ["city", "Pittsburgh"], ["state", "PA"], ["zip", "15214"], ["customer_id", 1], ["active", 1], ["address_type", "shipping"], ["created_at", "2025-02-18 20:38:44.283484"], ["updated_at", "2025-02-18 20:38:44.283484"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."active" = ? AND "addresses"."id" = ? LIMIT ?[0m  [["active", 1], ["id", 1], ["LIMIT", 1]]
+  [1m[36mAddress Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."active" = ? LIMIT ?[0m  [["active", 0], ["LIMIT", 1]]
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."address_type" = ? AND "addresses"."id" = ? LIMIT ?[0m  [["address_type", "billing"], ["id", 1], ["LIMIT", 1]]
+  [1m[36mAddress Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."address_type" = ? AND "addresses"."id" = ? LIMIT ?[0m  [["address_type", "shipping"], ["id", 2], ["LIMIT", 1]]
+  [1m[36mAddress Load (0.1ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" ORDER BY "addresses"."recipient" ASC LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mAddress Load (0.2ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" INNER JOIN "customers" ON "customers"."id" = "addresses"."customer_id" ORDER BY customers.last_name, customers.first_name LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+---------------------------------------------------
+Address: test_0001_validates presence of all fields
+---------------------------------------------------
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" IS NULL AND "addresses"."recipient" IS NULL AND "addresses"."zip" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-----------------------------------------------------------
+Address: test_0002_validates zip format and state inclusion
+-----------------------------------------------------------
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" IS NULL AND "addresses"."recipient" IS NULL AND "addresses"."zip" = ? LIMIT ?[0m  [["zip", "123"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------------------------------------------
+Order: test_0003_returns false if update fails when saving the payment receipt
+------------------------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.2ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:44.291895"], ["updated_at", "2025-02-18 20:38:44.291895"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAddress Load (0.0ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."address_type" = ? AND "addresses"."id" IS NOT NULL ORDER BY "addresses"."id" ASC LIMIT ?[0m  [["customer_id", 1], ["address_type", "billing"], ["LIMIT", 1]]
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."recipient" = ? AND "addresses"."zip" = ? LIMIT ?[0m  [["customer_id", 1], ["recipient", "John Doe"], ["zip", "15213"], ["LIMIT", 1]]
+  [1m[36mAddress Create (0.0ms)[0m  [1m[32mINSERT INTO "addresses" ("recipient", "street", "city", "state", "zip", "customer_id", "active", "address_type", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["recipient", "John Doe"], ["street", "123 Main St"], ["city", "Pittsburgh"], ["state", "PA"], ["zip", "15213"], ["customer_id", 1], ["active", 1], ["address_type", "billing"], ["created_at", "2025-02-18 20:38:44.293334"], ["updated_at", "2025-02-18 20:38:44.293334"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "orders" ("customer_id", "address_id", "order_date", "total", "paid", "payment_receipt", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?)[0m  [["customer_id", 1], ["address_id", 1], ["order_date", "2025-02-18"], ["total", 100.0], ["paid", nil], ["payment_receipt", nil], ["created_at", "2025-02-18 20:38:44.299105"], ["updated_at", "2025-02-18 20:38:44.299105"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mAddress Load (0.1ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."address_type" = ? ORDER BY "addresses"."id" ASC LIMIT ?[0m  [["customer_id", 1], ["address_type", "billing"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+--------------------------------------------------------------------
+Order: test_0004_returns the receipt string if payment is successful
+--------------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.2ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:44.302217"], ["updated_at", "2025-02-18 20:38:44.302217"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAddress Load (0.0ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."address_type" = ? AND "addresses"."id" IS NOT NULL ORDER BY "addresses"."id" ASC LIMIT ?[0m  [["customer_id", 1], ["address_type", "billing"], ["LIMIT", 1]]
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."recipient" = ? AND "addresses"."zip" = ? LIMIT ?[0m  [["customer_id", 1], ["recipient", "John Doe"], ["zip", "15213"], ["LIMIT", 1]]
+  [1m[36mAddress Create (0.0ms)[0m  [1m[32mINSERT INTO "addresses" ("recipient", "street", "city", "state", "zip", "customer_id", "active", "address_type", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["recipient", "John Doe"], ["street", "123 Main St"], ["city", "Pittsburgh"], ["state", "PA"], ["zip", "15213"], ["customer_id", 1], ["active", 1], ["address_type", "billing"], ["created_at", "2025-02-18 20:38:44.303898"], ["updated_at", "2025-02-18 20:38:44.303898"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "orders" ("customer_id", "address_id", "order_date", "total", "paid", "payment_receipt", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?)[0m  [["customer_id", 1], ["address_id", 1], ["order_date", "2025-02-18"], ["total", 100.0], ["paid", nil], ["payment_receipt", nil], ["created_at", "2025-02-18 20:38:44.304462"], ["updated_at", "2025-02-18 20:38:44.304462"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mAddress Load (0.0ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."address_type" = ? ORDER BY "addresses"."id" ASC LIMIT ?[0m  [["customer_id", 1], ["address_type", "billing"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mOrder Update (0.0ms)[0m  [1m[33mUPDATE "orders" SET "payment_receipt" = ?, "updated_at" = ? WHERE "orders"."id" = ?[0m  [["payment_receipt", "order: 1; amount_paid: 100.0; received: 2025-02-18; billing_zip: 15213"], ["updated_at", "2025-02-18 20:38:44.305525"], ["id", 1]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mOrder Load (0.0ms)[0m  [1m[34mSELECT "orders".* FROM "orders" WHERE "orders"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+-------------------------------------------------------
+Order: test_0001_returns false if order is already paid
+-------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.2ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:44.306958"], ["updated_at", "2025-02-18 20:38:44.306958"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAddress Load (0.0ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."address_type" = ? AND "addresses"."id" IS NOT NULL ORDER BY "addresses"."id" ASC LIMIT ?[0m  [["customer_id", 1], ["address_type", "billing"], ["LIMIT", 1]]
+  [1m[36mAddress Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."recipient" = ? AND "addresses"."zip" = ? LIMIT ?[0m  [["customer_id", 1], ["recipient", "John Doe"], ["zip", "15213"], ["LIMIT", 1]]
+  [1m[36mAddress Create (0.1ms)[0m  [1m[32mINSERT INTO "addresses" ("recipient", "street", "city", "state", "zip", "customer_id", "active", "address_type", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["recipient", "John Doe"], ["street", "123 Main St"], ["city", "Pittsburgh"], ["state", "PA"], ["zip", "15213"], ["customer_id", 1], ["active", 1], ["address_type", "billing"], ["created_at", "2025-02-18 20:38:44.308696"], ["updated_at", "2025-02-18 20:38:44.308696"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mOrder Create (0.1ms)[0m  [1m[32mINSERT INTO "orders" ("customer_id", "address_id", "order_date", "total", "paid", "payment_receipt", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?)[0m  [["customer_id", 1], ["address_id", 1], ["order_date", "2025-02-18"], ["total", 100.0], ["paid", nil], ["payment_receipt", "Paid"], ["created_at", "2025-02-18 20:38:44.309350"], ["updated_at", "2025-02-18 20:38:44.309350"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+------------------------------------------------------------
+Order: test_0002_returns false if billing address is missing
+------------------------------------------------------------
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mCustomer Create (0.2ms)[0m  [1m[32mINSERT INTO "customers" ("first_name", "last_name", "phone", "active", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?)[0m  [["first_name", "John"], ["last_name", "Doe"], ["phone", "1234567890"], ["active", 1], ["created_at", "2025-02-18 20:38:44.310352"], ["updated_at", "2025-02-18 20:38:44.310352"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mAddress Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."recipient" = ? AND "addresses"."zip" = ? LIMIT ?[0m  [["customer_id", 1], ["recipient", "John Doe"], ["zip", "15213"], ["LIMIT", 1]]
+  [1m[36mAddress Create (0.1ms)[0m  [1m[32mINSERT INTO "addresses" ("recipient", "street", "city", "state", "zip", "customer_id", "active", "address_type", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)[0m  [["recipient", "John Doe"], ["street", "123 Main St"], ["city", "Pittsburgh"], ["state", "PA"], ["zip", "15213"], ["customer_id", 1], ["active", 1], ["address_type", "shipping"], ["created_at", "2025-02-18 20:38:44.311420"], ["updated_at", "2025-02-18 20:38:44.311420"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mSAVEPOINT active_record_1[0m
+  [1m[36mOrder Create (0.0ms)[0m  [1m[32mINSERT INTO "orders" ("customer_id", "address_id", "order_date", "total", "paid", "payment_receipt", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?, ?, ?)[0m  [["customer_id", 1], ["address_id", 1], ["order_date", "2025-02-18"], ["total", 100.0], ["paid", nil], ["payment_receipt", nil], ["created_at", "2025-02-18 20:38:44.311954"], ["updated_at", "2025-02-18 20:38:44.311954"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[35mRELEASE SAVEPOINT active_record_1[0m
+  [1m[36mAddress Load (0.0ms)[0m  [1m[34mSELECT "addresses".* FROM "addresses" WHERE "addresses"."customer_id" = ? AND "addresses"."address_type" = ? ORDER BY "addresses"."id" ASC LIMIT ?[0m  [["customer_id", 1], ["address_type", "billing"], ["LIMIT", 1]]
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[31mrollback transaction[0m

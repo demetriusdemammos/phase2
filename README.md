@@ -4,7 +4,7 @@
 
 We will continue our project to develop a foundation for the ClassicCreamery management system in this phase. We will focus our efforts on building out the models for the three entities given to you in the this phase's ERD in `docs/creamery_erd_p2.pdf` and adding all necessary business logic. In addition, you will have to write unit tests for all models and ensure that test coverage is complete.
 
-**Grading**
+**Grading** 
 
 This phase will constitute 5 percent of your final course grade and is broken down into the following three components:
 

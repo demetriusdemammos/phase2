@@ -1,3 +1,5 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/-iFbBaQH)
+[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=22466076&assignment_repo_type=AssignmentRepo)
 # 67-272: ClassicCreamery Project - Phase 2
 
 We will continue our project to develop a foundation for the ClassicCreamery management system in this phase. We will focus our efforts on building out the models for the three entities given to you in the this phase's ERD in `docs/creamery_erd_p2.pdf` and adding all necessary business logic. In addition, you will have to write unit tests for all models and ensure that test coverage is complete.

@@ -1,2 +1,2 @@
 ﻿File,Tool,Method_Name,Prompt(s)_Used
-ExampleFile,ChatGPT,ExampleMethod,My prompt was… Replace this row with your real first use of Gen AI
+employee_test.rb,chatgpt, all test methods, I have put the first include statement of the test in please fill out the other ones based on whether this scope should include or not include the other two employees

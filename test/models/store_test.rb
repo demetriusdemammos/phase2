@@ -1,6 +1,9 @@
 require "test_helper"
-
+  
 describe Store do
+  should have_many(:assignments)
+  should have_many(:employees).through(:assignments)
+
   before do
     @oakland = Store.create!(
       name: "Oakland",

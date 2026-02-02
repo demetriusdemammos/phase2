@@ -18,7 +18,7 @@ describe Employee do
       first_name: "Amy",
       last_name: "Stevens",
       ssn: "103-76-8901",
-      date_of_birth: Date.new(2007, 5, 10),
+      date_of_birth: Date.new(2008, 5, 10),
       phone: "412-268-2000",
       role: "manager",
       active: true

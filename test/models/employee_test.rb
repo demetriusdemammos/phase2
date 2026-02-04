@@ -9,7 +9,7 @@ describe Employee do
       first_name: "Jason",
       last_name: "Stevens",
       ssn: "103-76-8902",
-      date_of_birth: Date.new(2004, 5, 10),
+      date_of_birth: 18.years.ago.to_date,
       phone: "412-268-3259",
       role: "employee",
       active: true
@@ -18,7 +18,7 @@ describe Employee do
       first_name: "Amy",
       last_name: "Stevens",
       ssn: "103-76-8901",
-      date_of_birth: Date.new(2008, 5, 10),
+      date_of_birth: 18.years.ago.to_date + 1.day,
       phone: "412-268-2000",
       role: "manager",
       active: true

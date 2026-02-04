@@ -2,7 +2,7 @@ class Employee < ApplicationRecord
   has_many :assignments
   has_many :stores, through: :assignments
 
-  enum role: { employee: 1, manager: 2, admin: 3 }
+  enum :role, { employee: 1, manager: 2, admin: 3 }
 
   scope :active, -> { where(active: true) }
   scope :inactive, -> { where(active: false) }

@@ -5,7 +5,7 @@ FactoryBot.define do
     ssn { "MyString" }
     date_of_birth { "2026-02-01" }
     phone { "MyString" }
-    role { "MyString" }
+    role { :employee }
     active { false }
   end
-end 
+end

@@ -11,7 +11,7 @@ describe Employee do
       ssn: "103-76-8902",
       date_of_birth: 18.years.ago.to_date,
       phone: "412-268-3259",
-      role: "employee",
+      role: :employee,
       active: true
     )
     @amy = Employee.create!(
@@ -20,7 +20,7 @@ describe Employee do
       ssn: "103-76-8901",
       date_of_birth: 18.years.ago.to_date + 1.day,
       phone: "412-268-2000",
-      role: "manager",
+      role: :manager,
       active: true
     )
     @bob = Employee.create!(
@@ -29,7 +29,7 @@ describe Employee do
       ssn: "105-76-8901",
       date_of_birth: Date.new(2000, 5, 10),
       phone: "412-268-1000",
-      role: "admin",
+      role: :admin,
       active: false
     )
 

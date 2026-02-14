@@ -1,5 +1,5 @@
 class Store < ApplicationRecord
-  has_many :assignments
+  has_many :assignments 
   has_many :employees, through: :assignments
 
   scope :active, -> { where(active: true) }

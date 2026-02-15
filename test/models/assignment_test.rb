@@ -233,8 +233,8 @@ describe Assignment do
       )
 
       first.reload
-      # Callback sets previous assignment end_date to (new start_date - 1 day) when valid
-      _(first.end_date).must_equal new_start - 1.day
+      # Callback sets previous assignment end_date to new assignment's start_date (same-day handoff)
+      _(first.end_date).must_equal new_start
     end
   end
 end

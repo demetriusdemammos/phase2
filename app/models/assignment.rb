@@ -27,7 +27,8 @@ class Assignment < ApplicationRecord
 
   def start_date_must_be_on_or_before_today
     return if start_date.blank?
-    errors.add(:start_date, "must be on or before today") if start_date > Date.current
+    date_to_check = start_date.respond_to?(:to_date) ? start_date.to_date : start_date
+    errors.add(:start_date, "must be on or before the present date") if date_to_check > Date.current
   end
 
   def end_date_must_be_after_start_date
@@ -48,11 +49,7 @@ class Assignment < ApplicationRecord
   end
 
   def end_current_assignment
-    current = employee.assignments.where(end_date: nil).where.not(id: id)
-    current.find_each do |assignment|
-      end_date_value = start_date - 1.day
-      end_date_value = Date.current if end_date_value <= assignment.start_date
-      assignment.update!(end_date: end_date_value)
-    end
+    previous = employee.assignments.where(end_date: nil).where.not(id: id).take
+    previous.update_column(:end_date, start_date) unless previous.nil?
   end
 end

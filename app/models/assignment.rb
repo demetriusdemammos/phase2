@@ -5,7 +5,7 @@ class Assignment < ApplicationRecord
   # Validations
   validates_presence_of :start_date, :store_id, :employee_id
   validate :start_date_must_be_on_or_before_today
-  # validate :end_date_must_be_after_start_date  # COMMENTED TO FIND AUTOGrader failure
+  validate :end_date_must_be_after_start_date
   validate :store_must_be_active
   validate :employee_must_be_active
 
@@ -31,10 +31,11 @@ class Assignment < ApplicationRecord
     errors.add(:start_date, "must be on or before the present date") if date_to_check > Date.current
   end
 
-  # def end_date_must_be_after_start_date  # COMMENTED TO FIND AUTOGrader failure
-  #   return if end_date.blank? || start_date.blank?
-  #   errors.add(:end_date, "must be after its start date") if end_date <= start_date
-  # end
+  def end_date_must_be_after_start_date
+    return if end_date.blank? || start_date.blank?
+    # Reject only when end_date is strictly before start_date (allow same-day)
+    errors.add(:end_date, "must be after start date") if end_date < start_date
+  end
 
   def store_must_be_active
     return if store_id.blank?

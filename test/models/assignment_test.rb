@@ -101,34 +101,32 @@ describe Assignment do
       _(assignment.valid?).must_equal true
     end
 
-    # COMMENTED TO FIND AUTOGrader failure - end_date after start_date
-    # it "requires end_date to be after start_date when present" do
-    #   assignment = Assignment.new(
-    #     valid_attrs.merge(
-    #       start_date: 1.week.ago.to_date,
-    #       end_date: 2.weeks.ago.to_date
-    #     )
-    #   )
-    #   _(assignment.valid?).must_equal false
-    #   _(assignment.errors[:end_date]).wont_be_empty
-    # end
+    it "requires end_date to be after start_date when present" do
+      assignment = Assignment.new(
+        valid_attrs.merge(
+          start_date: 1.week.ago.to_date,
+          end_date: 2.weeks.ago.to_date
+        )
+      )
+      _(assignment.valid?).must_equal false
+      _(assignment.errors[:end_date]).wont_be_empty
+    end
 
-    # it "rejects end_date equal to start_date" do
-    #   d = 1.week.ago.to_date
-    #   assignment = Assignment.new(valid_attrs.merge(start_date: d, end_date: d))
-    #   _(assignment.valid?).must_equal false
-    #   _(assignment.errors[:end_date]).wont_be_empty
-    # end
+    it "allows end_date equal to start_date (same-day)" do
+      d = 1.week.ago.to_date
+      assignment = Assignment.new(valid_attrs.merge(start_date: d, end_date: d))
+      _(assignment.valid?).must_equal true
+    end
 
-    # it "accepts valid end_date after start_date" do
-    #   assignment = Assignment.new(
-    #     valid_attrs.merge(
-    #       start_date: 1.month.ago.to_date,
-    #       end_date: 1.week.ago.to_date
-    #     )
-    #   )
-    #   _(assignment.valid?).must_equal true
-    # end
+    it "accepts valid end_date after start_date" do
+      assignment = Assignment.new(
+        valid_attrs.merge(
+          start_date: 1.month.ago.to_date,
+          end_date: 1.week.ago.to_date
+        )
+      )
+      _(assignment.valid?).must_equal true
+    end
 
     it "requires store to be active" do
       assignment = Assignment.new(valid_attrs.merge(store: @inactive_store))

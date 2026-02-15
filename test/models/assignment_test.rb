@@ -128,6 +128,17 @@ describe Assignment do
       _(assignment.valid?).must_equal true
     end
 
+    it "rejects end_date in the future" do
+      assignment = Assignment.new(
+        valid_attrs.merge(
+          start_date: 1.week.ago.to_date,
+          end_date: 1.day.from_now.to_date
+        )
+      )
+      _(assignment.valid?).must_equal false
+      _(assignment.errors[:end_date]).wont_be_empty
+    end
+
     it "requires store to be active" do
       assignment = Assignment.new(valid_attrs.merge(store: @inactive_store))
       _(assignment.valid?).must_equal false

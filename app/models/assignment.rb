@@ -5,6 +5,7 @@ class Assignment < ApplicationRecord
   # Validations
   validates_presence_of :start_date, :store_id, :employee_id
   validate :start_date_must_be_on_or_before_today
+  validate :end_date_must_not_be_in_future
   validate :end_date_must_be_after_start_date
   validate :store_must_be_active
   validate :employee_must_be_active
@@ -29,6 +30,12 @@ class Assignment < ApplicationRecord
     return if start_date.blank?
     date_to_check = start_date.respond_to?(:to_date) ? start_date.to_date : start_date
     errors.add(:start_date, "must be on or before the present date") if date_to_check > Date.current
+  end
+
+  def end_date_must_not_be_in_future
+    return if end_date.blank?
+    date_to_check = end_date.respond_to?(:to_date) ? end_date.to_date : end_date
+    errors.add(:end_date, "cannot be in the future") if date_to_check > Date.current
   end
 
   def end_date_must_be_after_start_date

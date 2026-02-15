@@ -51,7 +51,7 @@ class Assignment < ApplicationRecord
   def end_current_assignment
     current = employee.assignments.where(end_date: nil).where.not(id: id)
     current.find_each do |assignment|
-      assignment.update!(end_date: start_date - 1.day)
+      assignment.update!(end_date: Date.current)
     end
   end
 end

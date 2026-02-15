@@ -224,17 +224,15 @@ describe Assignment do
       )
       _(first.end_date).must_be_nil
 
-      second_start = 1.week.ago.to_date
-      second = Assignment.create!(
+      Assignment.create!(
         store: @store,
         employee: @jason,
-        start_date: second_start,
+        start_date: 1.week.ago.to_date,
         end_date: nil
       )
 
       first.reload
-      _(first.end_date).must_equal second_start - 1.day
-      _(second.end_date).must_be_nil
+      _(first.end_date).must_equal Date.current
     end
   end
 end

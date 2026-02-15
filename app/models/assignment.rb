@@ -4,6 +4,7 @@ class Assignment < ApplicationRecord
 
   # Validations
   validates_presence_of :start_date, :store_id, :employee_id
+  validates_date :start_date
   validate :start_date_must_be_on_or_before_today
   validate :end_date_must_be_after_start_date
   validate :store_must_be_active
@@ -38,14 +39,18 @@ class Assignment < ApplicationRecord
 
   def store_must_be_active
     return if store_id.blank?
-    return if Store.active.exists?(id: store_id)
-    errors.add(:store_id, "must be an active store")
+    active_store_ids = Store.active.all.map(&:id)
+    unless active_store_ids.include?(store_id)
+      errors.add(:store, "is not an active store in the system")
+    end
   end
 
   def employee_must_be_active
     return if employee_id.blank?
-    return if Employee.active.exists?(id: employee_id)
-    errors.add(:employee_id, "must be an active employee")
+    active_employee_ids = Employee.active.all.map(&:id)
+    unless active_employee_ids.include?(employee_id)
+      errors.add(:employee, "is not an active employee in the system")
+    end
   end
 
   def end_current_assignment

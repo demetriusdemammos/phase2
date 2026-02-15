@@ -132,13 +132,13 @@ describe Assignment do
     it "requires store to be active" do
       assignment = Assignment.new(valid_attrs.merge(store: @inactive_store))
       _(assignment.valid?).must_equal false
-      _(assignment.errors[:store_id]).wont_be_empty
+      _(assignment.errors[:store]).wont_be_empty
     end
 
     it "requires employee to be active" do
       assignment = Assignment.new(valid_attrs.merge(employee: @bob))
       _(assignment.valid?).must_equal false
-      _(assignment.errors[:employee_id]).wont_be_empty
+      _(assignment.errors[:employee]).wont_be_empty
     end
   end
 

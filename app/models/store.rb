@@ -9,8 +9,8 @@ class Store < ApplicationRecord
 
   validates_presence_of :name, :street, :city, :state, :zip, :phone
   validates_uniqueness_of :name, case_sensitive: false
-  validates :state, inclusion: { in: %w[PA OH WV], message: "must be PA, OH, or WV" }
-  validates :zip, format: { with: /\A\d{5}\z/, message: "must be 5 digits" }
+  validates_inclusion_of :state, in: %w[PA OH WV], message: "is not an option"
+  validates_format_of :zip, with: /\A\d{5}\z/, message: "should be five digits long"
   validate :phone_must_be_10_digits
 
 

@@ -4,7 +4,6 @@ class Assignment < ApplicationRecord
 
   # Validations
   validates_presence_of :start_date, :store_id, :employee_id
-  validates_date :start_date
   validate :start_date_must_be_on_or_before_today
   validate :end_date_must_be_after_start_date
   validate :store_must_be_active
@@ -51,7 +50,9 @@ class Assignment < ApplicationRecord
   def end_current_assignment
     current = employee.assignments.where(end_date: nil).where.not(id: id)
     current.find_each do |assignment|
-      assignment.update!(end_date: Date.current)
+      end_date_value = start_date - 1.day
+      end_date_value = Date.current if end_date_value <= assignment.start_date
+      assignment.update!(end_date: end_date_value)
     end
   end
 end

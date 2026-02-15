@@ -224,15 +224,17 @@ describe Assignment do
       )
       _(first.end_date).must_be_nil
 
+      new_start = 1.week.ago.to_date
       Assignment.create!(
         store: @store,
         employee: @jason,
-        start_date: 1.week.ago.to_date,
+        start_date: new_start,
         end_date: nil
       )
 
       first.reload
-      _(first.end_date).must_equal Date.current
+      # Callback sets previous assignment end_date to (new start_date - 1 day) when valid
+      _(first.end_date).must_equal new_start - 1.day
     end
   end
 end
